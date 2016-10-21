@@ -186,14 +186,15 @@ if __name__ == "__main__":
     n_cut, ied, aid, fomd, ex, cr, cond = [], [], [], [], [], [], []
 
     for cs in partition:
-        community = graph.subgraph(cs)
-        n_cut.append(normalized_cut(graph, community))
-        ied.append(internal_edge_density(community))
-        aid.append(average_internal_degree(community))
-        fomd.append(fraction_over_median_degree(community))
-        ex.append(expansion(graph, community))
-        cr.append(cut_ratio(graph, community))
-        cond.append(conductance(graph, community))
+        if len(cs) > 1:
+            community = graph.subgraph(cs)
+            n_cut.append(normalized_cut(graph, community))
+            ied.append(internal_edge_density(community))
+            aid.append(average_internal_degree(community))
+            fomd.append(fraction_over_median_degree(community))
+            ex.append(expansion(graph, community))
+            cr.append(cut_ratio(graph, community))
+            cond.append(conductance(graph, community))
         
     print "Measure: min/max/avg/std"
     print "Normalized Cut: %f/%f/%f/%f" % (min(n_cut), max(n_cut), np.mean(n_cut), np.std(n_cut))
@@ -204,5 +205,5 @@ if __name__ == "__main__":
     print "Cut Ratio: %f/%f/%f/%f" % (min(cr), max(cr), np.mean(cr), np.std(cr))
     print "Conductance: %f/%f/%f/%f" % (min(cond), max(cond), np.mean(cond), np.std(cond))
     print ""
-    print "Modularity: %f" % modularity(graph, partition)
+    print "Modularity (no overlap): %f" % modularity(graph, partition)
 
