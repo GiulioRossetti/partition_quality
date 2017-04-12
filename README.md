@@ -4,7 +4,9 @@ Quality scores to evaluate network partitions
 (Partial) Implementation of the measures listed in
 
 ```
-Yang, Jaewon, and Jure Leskovec. "Defining and evaluating network communities based on ground-truth." Knowledge and Information Systems 42.1 (2015): 181-213.
+Yang, Jaewon, and Jure Leskovec. 
+"Defining and evaluating network communities based on ground-truth." 
+Knowledge and Information Systems 42.1 (2015): 181-213.
 ```
 
 ## Implemented quality functions
