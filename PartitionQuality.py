@@ -54,7 +54,7 @@ def read_communities(filename):
     cms = []
     for l in f:
         l = l.rstrip().split(",")
-        cms .append(l)
+        cms.append(l)
     return cms
 
 
