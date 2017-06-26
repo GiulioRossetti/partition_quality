@@ -32,8 +32,11 @@ Text file in edgelist format (one edge per row), semicolon as node separator.
 Example:
 
 > node1;node2
+
 > node3;node1
+
 > node4;node5
+
 > node5;node2
 
 ### Community file
