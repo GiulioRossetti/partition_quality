@@ -1,8 +1,12 @@
 import networkx as nx
 import numpy as np
+import pandas as pd
+from colorama import *
+init(autoreset=True)
 
 __author__ = "Giulio Rossetti"
-__contact__ = "giulio.rossetti@isti.cnr.it"
+__contact__ = "giulio.rossetti@gmail.com"
+__github__ = "https://github.com/GiulioRossetti"
 
 
 def read_graph(filename):
@@ -199,12 +203,15 @@ def modularity(g, coms):
 if __name__ == "__main__":
     import argparse
 
-    print "-------------------------------------"
-    print "         Partition Quality           "
-    print "-------------------------------------"
-    print "Author: ", __author__
-    print "Email:  ", __contact__
-    print "------------------------------------\n"
+    print "-----------------------------------------------------------------"
+    print Fore.GREEN + "                         Partition Quality"
+    print "-----------------------------------------------------------------"
+    print "Author: " + Fore.RED + __author__
+    print "Email:  " + Fore.RED + __contact__
+    print "GitHub: " + Fore.RED + __github__
+    print "-----------------------------------------------------------------\n"
+
+
 
     parser = argparse.ArgumentParser()
 
@@ -234,26 +241,44 @@ if __name__ == "__main__":
             flake.append(flake_odf(graph, community))
             tpr.append(triangle_participation_ratio(community))
 
-    print "For each measure are reported the values for: min/max/avg/std"
+    print Fore.GREEN + "Scoring functions based on internal connectivity"
+    m1 = [
+        ["Internal Density", min(ied), max(ied), np.mean(ied), np.std(ied)],
+        ["Edges inside", min(nedges), max(nedges), np.mean(nedges), np.std(nedges)],
+        ["Average Degree", min(aid), max(aid), np.mean(aid), np.std(aid)],
+        ["FOMD", min(fomd), max(fomd), np.mean(fomd), np.std(fomd)],
+        ["TPR", min(tpr), max(tpr), np.mean(tpr), np.std(tpr)]
+    ]
+    df = pd.DataFrame(m1, columns=["function", "min", "max",  "avg", "std"])
+    df.set_index('function', inplace=True)
+    print df
 
-    print "\nScoring functions based on internal connectivity"
-    print "Internal Density: %f/%f/%f/%f" % (min(ied), max(ied), np.mean(ied), np.std(ied))
-    print "Edges inside: %f/%f/%f/%f" % (min(nedges), max(nedges), np.mean(nedges), np.std(nedges))
-    print "Average Degree: %f/%f/%f/%f" % (min(aid), max(aid), np.mean(aid), np.std(aid))
-    print "Fraction Over Median Degree (FOMD): %f/%f/%f/%f" % (min(fomd), max(fomd), np.mean(fomd), np.std(fomd))
-    print "Triangle Participation Ratio (TPR): %f/%f/%f/%f" % (min(tpr), max(tpr), np.mean(tpr), np.std(tpr))
+    print "\n" + Fore.GREEN + "Scoring functions based on external connectivity"
+    m2 = [
+        ["Expansion", min(ex), max(ex), np.mean(ex), np.std(ex)],
+        ["Cut Ratio", min(cr), max(cr), np.mean(cr), np.std(cr)]
+    ]
+    df2 = pd.DataFrame(m2, columns=["function", "min", "max",  "avg", "std"])
+    df2.set_index('function', inplace=True)
+    print df2
 
-    print "\nScoring functions based on external connectivity"
-    print "Expansion: %f/%f/%f/%f" % (min(ex), max(ex), np.mean(ex), np.std(ex))
-    print "Cut Ratio: %f/%f/%f/%f" % (min(cr), max(cr), np.mean(cr), np.std(cr))
+    print "\n" +Fore.GREEN + "Scoring functions that combine internal and external connectivity"
+    m3 = [
+        ["Conductance", min(cond), max(cond), np.mean(cond), np.std(cond)],
+        ["Normalized Cut", min(n_cut), max(n_cut), np.mean(n_cut), np.std(n_cut)],
+        ["Maximum-ODF", min(modf), max(modf), np.mean(modf), np.std(modf)],
+        ["Average-ODF", min(aodf), max(aodf), np.mean(aodf), np.std(aodf)],
+        ["Flake-ODF", min(flake), max(flake), np.mean(flake), np.std(flake)]
 
-    print "\nScoring functions that combine internal and external connectivity"
-    print "Conductance: %f/%f/%f/%f" % (min(cond), max(cond), np.mean(cond), np.std(cond))
-    print "Normalized Cut: %f/%f/%f/%f" % (min(n_cut), max(n_cut), np.mean(n_cut), np.std(n_cut))
-    print "Maximum-ODF (Out Degree Fraction): %f/%f/%f/%f" % (min(modf), max(modf), np.mean(modf), np.std(modf))
-    print "Average-ODF: %f/%f/%f/%f" % (min(aodf), max(aodf), np.mean(aodf), np.std(aodf))
-    print "Flake-ODF: %f/%f/%f/%f" % (min(flake), max(flake), np.mean(flake), np.std(flake))
+    ]
+    df3 = pd.DataFrame(m3, columns=["function", "min", "max",  "avg", "std"])
+    df3.set_index('function', inplace=True)
+    print df3
 
-    print "\nScoring function based on a network model"
-    print "Modularity (no overlap): %f" % modularity(graph, partition)
-
+    print "\n" + Fore.GREEN + "Scoring function based on a network model"
+    m4 = [
+        ["Modularity (no overlap)", modularity(graph, partition)]
+    ]
+    df4 = pd.DataFrame(m4, columns=["function", "value"])
+    df4.set_index('function', inplace=True)
+    print df4
