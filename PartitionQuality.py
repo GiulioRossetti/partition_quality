@@ -67,6 +67,10 @@ def internal_edge_density(coms):
     return internal_density
 
 
+def edges_inside(coms):
+    return coms.number_of_edges()
+
+
 def average_internal_degree(coms):
     ms = len(coms.edges())
     ns = len(coms.nodes())
@@ -78,10 +82,10 @@ def average_internal_degree(coms):
 
 
 def fraction_over_median_degree(coms):
-    ns = len(community.nodes())
+    ns = community.number_of_nodes()
     degs = coms.degree()
     med = median(degs.values())
-    above_med = len([d for d in degs if d > med])
+    above_med = len([d for d in degs.values() if d > med])
     try:
         ratio = float(above_med) / ns
     except:
@@ -150,6 +154,36 @@ def normalized_cut(g, coms):
     return ratio
 
 
+def __out_degree_fraction(g, coms):
+    nds = []
+    for n in coms:
+        nds.append(g.degree(n) - coms.degree(n))
+    return nds
+
+
+def max_odf(g, coms):
+    return max(__out_degree_fraction(g, coms))
+
+
+def avg_odf(g, coms):
+    return float(sum(__out_degree_fraction(g, coms)))/len(coms)
+
+
+def flake_odf(g, coms):
+    df = 0
+    for n in coms:
+        fr = coms.degree(n) - (g.degree(n) - coms.degree(n))
+        if fr < 0:
+            df += 1
+    return float(df)/len(coms)
+
+
+def triangle_participation_ratio(coms):
+    cls = nx.triangles(coms)
+    nc = [n for n in cls if cls[n] > 0]
+    return float(len(nc))/len(coms)
+
+
 def modularity(g, coms):
     part = {}
     ids = 0
@@ -181,27 +215,45 @@ if __name__ == "__main__":
 
     graph = read_graph(args.graph_file)
     partition = read_communities(args.community_file)
-    n_cut, ied, aid, fomd, ex, cr, cond = [], [], [], [], [], [], []
+    n_cut, ied, aid, fomd, ex, cr, cond, nedges, modf, aodf, flake, tpr = [], [], [], [], [], [], [], [], [], [], [], []
 
     for cs in partition:
         if len(cs) > 1:
             community = graph.subgraph(cs)
+
             n_cut.append(normalized_cut(graph, community))
             ied.append(internal_edge_density(community))
             aid.append(average_internal_degree(community))
             fomd.append(fraction_over_median_degree(community))
             ex.append(expansion(graph, community))
             cr.append(cut_ratio(graph, community))
+            nedges.append(edges_inside(community))
             cond.append(conductance(graph, community))
-        
-    print "Measure: min/max/avg/std"
-    print "Normalized Cut: %f/%f/%f/%f" % (min(n_cut), max(n_cut), np.mean(n_cut), np.std(n_cut))
-    print "Internal Edge Density: %f/%f/%f/%f" % (min(ied), max(ied), np.mean(ied), np.std(ied))
-    print "Average Internal Degree: %f/%f/%f/%f" % (min(aid), max(aid), np.mean(aid), np.std(aid))
-    print "Fraction over median degree: %f/%f/%f/%f" % (min(fomd), max(fomd), np.mean(fomd), np.std(fomd))
+            modf.append(max_odf(graph, community))
+            aodf.append(avg_odf(graph, community))
+            flake.append(flake_odf(graph, community))
+            tpr.append(triangle_participation_ratio(community))
+
+    print "For each measure are reported the values for: min/max/avg/std"
+
+    print "\nScoring functions based on internal connectivity"
+    print "Internal Density: %f/%f/%f/%f" % (min(ied), max(ied), np.mean(ied), np.std(ied))
+    print "Edges inside: %f/%f/%f/%f" % (min(nedges), max(nedges), np.mean(nedges), np.std(nedges))
+    print "Average Degree: %f/%f/%f/%f" % (min(aid), max(aid), np.mean(aid), np.std(aid))
+    print "Fraction Over Median Degree (FOMD): %f/%f/%f/%f" % (min(fomd), max(fomd), np.mean(fomd), np.std(fomd))
+    print "Triangle Participation Ratio (TPR): %f/%f/%f/%f" % (min(tpr), max(tpr), np.mean(tpr), np.std(tpr))
+
+    print "\nScoring functions based on external connectivity"
     print "Expansion: %f/%f/%f/%f" % (min(ex), max(ex), np.mean(ex), np.std(ex))
     print "Cut Ratio: %f/%f/%f/%f" % (min(cr), max(cr), np.mean(cr), np.std(cr))
+
+    print "\nScoring functions that combine internal and external connectivity"
     print "Conductance: %f/%f/%f/%f" % (min(cond), max(cond), np.mean(cond), np.std(cond))
-    print ""
+    print "Normalized Cut: %f/%f/%f/%f" % (min(n_cut), max(n_cut), np.mean(n_cut), np.std(n_cut))
+    print "Maximum-ODF (Out Degree Fraction): %f/%f/%f/%f" % (min(modf), max(modf), np.mean(modf), np.std(modf))
+    print "Average-ODF: %f/%f/%f/%f" % (min(aodf), max(aodf), np.mean(aodf), np.std(aodf))
+    print "Flake-ODF: %f/%f/%f/%f" % (min(flake), max(flake), np.mean(flake), np.std(flake))
+
+    print "\nScoring function based on a network model"
     print "Modularity (no overlap): %f" % modularity(graph, partition)
 
