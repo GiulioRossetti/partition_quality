@@ -42,9 +42,8 @@ def community_modularity(coms, g):
 def read_graph(filename):
     f = open(filename)
     g = nx.Graph()
-    f.next()
     for l in f:
-        l = l.split(";")
+        l = l.rstrip().split(";")
         g.add_edge(l[0], l[1])
     return g
 
@@ -182,7 +181,6 @@ if __name__ == "__main__":
 
     graph = read_graph(args.graph_file)
     partition = read_communities(args.community_file)
-
     n_cut, ied, aid, fomd, ex, cr, cond = [], [], [], [], [], [], []
 
     for cs in partition:
