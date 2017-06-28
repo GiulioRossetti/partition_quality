@@ -29,7 +29,7 @@ Knowledge and Information Systems 42.1 (2015): 181-213.
 - Average-ODF
 - Flake-ODF
 
-### coring function based on a network model
+### Scoring function based on a network model
 - Modularity
 
 # Execution
