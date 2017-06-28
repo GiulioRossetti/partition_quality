@@ -5,6 +5,24 @@ __author__ = "Giulio Rossetti"
 __contact__ = "giulio.rossetti@isti.cnr.it"
 
 
+def read_graph(filename):
+    f = open(filename)
+    g = nx.Graph()
+    for l in f:
+        l = l.rstrip().split(";")
+        g.add_edge(l[0], l[1])
+    return g
+
+
+def read_communities(filename):
+    f = open(filename)
+    cms = []
+    for l in f:
+        l = l.rstrip().split(",")
+        cms.append(l)
+    return cms
+
+
 def median(lst):
     return np.median(np.array(lst))
 
@@ -37,24 +55,6 @@ def community_modularity(coms, g):
     for com in set(coms.values()):
         res += (inc.get(com, 0.) / links) - (deg.get(com, 0.) / (2.*links))**2
     return res
-
-
-def read_graph(filename):
-    f = open(filename)
-    g = nx.Graph()
-    for l in f:
-        l = l.rstrip().split(";")
-        g.add_edge(l[0], l[1])
-    return g
-
-
-def read_communities(filename):
-    f = open(filename)
-    cms = []
-    for l in f:
-        l = l.rstrip().split(",")
-        cms.append(l)
-    return cms
 
 
 def internal_edge_density(coms):
