@@ -34,36 +34,13 @@ Knowledge and Information Systems 42.1 (2015): 181-213.
 
 # Execution
 ```python
-    python PartitionQuality.py nework_filename partition_filename
-```
-
-## Input files specification
-
-### Graph file
-Text file in edgelist format (one edge per row), semicolon as node separator.
-
-Example:
-
-```bash
-node1;node2
-node3;node1
-node4;node5
-node5;node2
-```
-
-### Community file
-Text file in comlist format (one community per row), comma as node separator. 
-
-Example:
-
-```bash
-node1,node2,node3,node4,node5
-node6,node7,node8
-node9,node10
-node11,node12,node13,node14
+    import pquality
+    scores = pquality.pquality_summary()
+    print(scores['Indexes'])
+    print(scores['Modularity'])
 ```
 
 # Dependencies
-- Python 2.7
-- networkx
+- Python 3.x
+- networkx>2.x
 - numpy

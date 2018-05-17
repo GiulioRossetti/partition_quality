@@ -1,0 +1,3 @@
+pandas
+numpy
+networkx==2.1

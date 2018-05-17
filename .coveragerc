@@ -1,0 +1,9 @@
+[run]
+omit =
+ setup.py
+ pquality/__main__.py
+ pquality/test/*
+
+[report]
+exclude_lines =
+    def main()
