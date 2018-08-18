@@ -70,7 +70,7 @@ def fraction_over_median_degree(coms):
     degs = coms.degree()
 
     med = median([d[1] for d in degs])
-    above_med = len([d[0] for d in degs if d[0] > med])
+    above_med = len([d[0] for d in degs if d[1] > med])
     try:
         ratio = float(above_med) / ns
     except:
