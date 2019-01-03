@@ -1,4 +1,3 @@
 pandas
 numpy
-demon
 networkx==2.2

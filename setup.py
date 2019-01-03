@@ -9,7 +9,7 @@ __email__ = "giulio.rossetti@gmail.com"
 #    long_description = f.read()
 
 setup(name='pquality',
-      version='0.0.7',
+      version='0.0.8',
       license='BSD-2-Clause',
       description='Community Discovery Partition Quality Indicators',
       url='https://github.com/GiulioRossetti/partition_quality',
@@ -34,8 +34,6 @@ setup(name='pquality',
 
           # Specify the Python versions you support here. In particular, ensure
           # that you indicate whether you support Python 2, Python 3 or both.
-          'Programming Language :: Python',
-          'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3'
       ],
       keywords=['complex-networks', 'community-discovery', 'quality-measures'],
