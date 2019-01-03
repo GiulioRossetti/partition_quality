@@ -1,3 +1,4 @@
 pandas
 numpy
-networkx==2.1
+demon
+networkx==2.2

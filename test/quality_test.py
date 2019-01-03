@@ -2,6 +2,7 @@ import unittest
 import demon as d
 from pquality.PartitionQuality import pquality_summary
 import networkx as nx
+import pandas as pd
 
 
 class QualityTestCase(unittest.TestCase):
@@ -12,7 +13,8 @@ class QualityTestCase(unittest.TestCase):
         coms = D.execute()
         res = pquality_summary(g, coms)
         for _, v in res.items():
-            print(v)
+            self.assertIsInstance(v, pd.DataFrame)
+
 
 if __name__ == '__main__':
     unittest.main()
