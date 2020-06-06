@@ -9,7 +9,7 @@ __email__ = "giulio.rossetti@gmail.com"
 #    long_description = f.read()
 
 setup(name='pquality',
-      version='0.0.8',
+      version='0.0.9',
       license='BSD-2-Clause',
       description='Community Discovery Partition Quality Indicators',
       url='https://github.com/GiulioRossetti/partition_quality',
