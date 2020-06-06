@@ -45,7 +45,7 @@ def internal_edge_density(coms):
     ms = len(coms.edges())
     ns = len(coms.nodes())
     try:
-        internal_density = float(ms) / float(ns * (ns - 1)) / 2
+        internal_density = float(ms) / (float(ns * (ns - 1)) / 2)
     except:
         return 0
     return internal_density
